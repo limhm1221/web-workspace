@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>게시판</h1>
+	<hr>
+	<h3 th:if="${session.user != null}"><a href="/board/writeFrm">게시글 작성</a></h3>
+	<table border="1">
+		<tr>
+			<th>글번호</th>
+			<th>제목</th>
+			<th>작성자</th>
+			<th>작성일</th>
+		</tr>
+		<tr th:each="b : ${list}">
+			<td th:text="${b.boardNo}"></td>
+			<td>
+				<!--  <a th:href="@{/board/view(boardNo=${b.boardNo})}" th:text="${b.boardTitle}"></a>-->
+				<a th:href="@{/board/view2(boardNo=${b.boardNo})}" th:text="${b.boardTitle}"></a>
+			</td>
+			
+			<td th:text="${b.boardTitle}"></td>
+			<td th:text="${b.boardWriter}"></td>
+			<td th:text="${b.boardDate}"></td>
+		</tr>
+	</table>
+	<div th:utext="${pageNavi}"></div>
+</body>
+</html>

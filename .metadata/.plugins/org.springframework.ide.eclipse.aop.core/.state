@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop-reference-model>
+<aop-project name="react_board_back"/>
+<aop-project name="07_springboot_webproject"/>
+<aop-project name="yomi_project"/>
+<aop-project name="08_spring_mybatis"/>
+<aop-project name="06_springboot_thymeleaf"/>
+<aop-project name="react_web_back"/>
+<aop-project name="react_member_back"/>
+<aop-project name="GitTestProject"/>
+<aop-project name="new_react_member2_back"/>
+</aop-reference-model>

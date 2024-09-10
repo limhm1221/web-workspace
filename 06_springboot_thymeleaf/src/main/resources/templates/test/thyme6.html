@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Thymeleaf each 테스트</h1>
+	<hr>
+	<th:block th:each="num : ${list1}">
+		<h4 th:text="${num}"></h4>
+	</th:block>
+	<hr>
+	<h4 th:each="num : ${list1}" th:text="${num}"></h4>
+	<hr>
+	<th:block th:each="s : ${list2}">
+		<ul>
+			<li th:text="${s.name}"></li>
+			<li th:text="${s.age}"></li>
+			<li th:text="${s.addr}"></li>		
+		</ul>
+		</th:block>
+		<hr>
+		<ul th:each="s : ${list2}">
+			<li th:text="${s.name}"></li>
+			<li th:text="${s.age}"></li>
+			<li th:text="${s.addr}"></li>		
+		</ul>
+		<hr><hr>
+		<ul th:each="s,status : ${list2}">
+			<li th:text="${s.name}"></li>
+			<li th:text="${status.index}"></li>
+			<li th:text="${status.count}"></li>
+			<li th:text="${status.size}"></li>
+			<li th:text="${status.even}"></li>
+			<li th:text="${status.odd}"></li>
+			<li th:text="${status.first}"></li>
+			<li th:text="${status.last}"></li>
+			<li th:text="${status.current}"></li>
+		</ul>
+		<hr>
+		<p th:each="num : ${#numbers.sequence(1,5)}" th:text="${num}"></p>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

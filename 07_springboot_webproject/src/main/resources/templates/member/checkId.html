@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>아이디 중복 체크 </title>
+<link rel="stylesheet" href="/css/default.css">
+<script src="/js/jquery-3.6.0.js"></script>
+<style>
+	#check-container{
+		width:600px;
+		display:flex;
+		flex-direction : column;
+		justify-content : center;
+		align-items : center;
+		flex-grow : 1;
+	}
+	#check-container>div{
+		padding: 50px;
+		border-radius : 12px;
+		background-color : var(--gray8);
+		text-align : center;
+	}
+	#check-container>div>div{
+		margin-bottom : 50px
+	}
+	.valid-id{
+		color : var(--main2);
+	}
+	
+	.invalid-id{
+		color : #ff3d00;
+	}
+</style>
+</head>
+<body>
+	<div id="check-container">
+		<th:block th:if="${result == 0}">
+			<div>
+				<div>[<span class="valid-id" th:text="${memberId}"></span>]는 사용 가능합니다.</div>
+				<button type="button" class="btn-primary" id="closeBtn">닫기</button>
+			</div>
+			<script>
+				$("#closeBtn").on("click",function(){
+					//이렇게 코드를 작성하면 현재페이지에서 id가 memberId인 요소를 검색
+					//const memberIdInput =$("#memberId");
+					//우리가 찾고있는 input은 현재창이 아니라 부모창에있는 input
+					//부모창(현재창을 open한 창)의 요소를 선택하는  방법
+					const memberIdInput = $("#memberId",opener.document);
+					const id =$(".valid-id").text();
+					memberIdInput.val(id);
+					memberIdInput.addClass("valid");
+					self.close();//현재 창을 닫는 코드
+				});
+			</script>
+		</th:block>
+		<th:block th:if="${result == 1}">
+			<div>
+				<div>[<span class="invalid-id" th:text="${memberId}"></span>]는 이미 사용중입니다.</div>
+				<form action="/member/checkId" method="post">
+					<div class="input-item">
+						<input type="text" id="checkId" name="checkId" th:value="${memberId}">
+						<button type="submit" class="btn-primary">조회</button>
+					</div>
+				</form>
+			</div>
+		</th:block>
+	</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 작성</title>
+<style>
+	.notice-write-container{
+		display:flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.notice-write-wrap{
+		width: 1000px;
+	}
+	
+	.notice-write-wrap .input-item>input[type=text]{
+		border-bottom: none;
+		padding: 0;
+		
+	}
+	
+	.notice-write-wrap .input-item>textarea{
+		height: 300px;
+	}
+</style>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+		<main class="content notice-write-container">
+			<section class="section notice-write-wrap">
+				<div class="page-title">공지사항</div>
+				<!-- 
+					첨부파일을 포함해서 데이터를 전송하는경우
+					method = "post"
+					enctype= "multipart/form-data"
+					두값이 반드시 명시되어야 함
+				 -->
+				<form action="/notice/write" method="post" enctype="multipart/form-data">
+					<table class="tbl">
+						<tr>
+							<th>제목</th>
+							<td colspan="3">
+								<div class="input-item">
+									<input type="text" name="noticeTitle">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th style="width:10%;">작성자</th>
+							<td style="width:40%;">
+								<span th:text="${session.member.memberId}"></span>
+								<input type="hidden" name="noticeWriter" th:value="${session.member.memberId}">
+							</td>
+							<th style="width:10%;">첨부파일</th>
+							<td style="width:40%;">
+							<!--  input type = file의 name 반드시 vo의 변수명과 다르게 작성 -->
+							<input type="file" name="upfile" multiple>
+						</tr>
+						<tr>
+							<td colspan="4">
+								<div class="input-item">
+								<!--  본문은 여루줄의 값을 입력하므로 input이 아닌 textarea로 입력 받음 -->
+									<textarea name="noticeContent"></textarea>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4">
+								<button type="submit" class="btn-primary lg">공지사항 작성</button>
+							</td>
+					</table>
+				</form>
+			</section>
+		</main>
+		<th:block th:include="common/footer"></th:block>
+</body>
+</html>

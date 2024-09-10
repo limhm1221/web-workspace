@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;FileUtils.java&apos; to &apos;react_web_back/src/main/java/kr.co.iei.util&apos;&#x0D;&#x0A;- Original project: &apos;08_spring_mybatis&apos;&#x0D;&#x0A;- Destination element: &apos;react_web_back/src/main/java/kr.co.iei.util&apos;&#x0D;&#x0A;- Original element: &apos;kr.co.iei.utill.FileUtils.java&apos;" description="Copy compilation unit" destination="=react_web_back/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;kr.co.iei.util" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;kr.co.iei.utill{FileUtils.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1725428507736" units="1" version="1.0"/>
+</session>

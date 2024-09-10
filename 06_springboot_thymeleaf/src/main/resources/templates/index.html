@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Spring Boot - Thymeleaf 메인페이지</h1>
+	<hr>
+	<h3><a href="/request">1. Spring Controller 호출</a></h3>
+	<h3><a href="/request2?str=임형묵&no=100">2. Spring Controller에 데이터 전송하기</a></h3>
+	<h3>3. Spring Controller에 데이터 전송하고, 응답받아서 화면에 출력하기</h3>
+	<form action="/plus" method="post">
+		<input type="text" name="no1">
+		+
+		<input type="text" name="no2">
+		<input type="submit" value="더하기">
+	</form>
+	<hr>
+	<h3><a href="/thymeTest1">1. Thymeleaf테스트1(기본형변수 화면에 출력하기)</a></h3>
+	<h3><a href="/thymeTest2">2. Thymeleaf테스트2(객체데이터 화면에 출력하기)</a></h3>
+	<h3><a href="/thymeTest3">3. Thymeleaf테스트3(리스트데이터 화면에 출력하기)</a></h3>
+	<h3><a href="/thymeTest4">4. Thymeleaf테스트4(if 사용하기)</a></h3>
+	<h3><a href="/thymeTest5">5. Thymeleaf테스트5(switch 사용하기)</a></h3>
+	<h3><a href="/thymeTest6">6. Thymeleaf테스트6(each 사용하기)</a></h3>
+	<hr>
+	
+	<h3><a href="/allMember">전체회원조회</a></h3>
+	<h3><a href="/searchIdFrm">아아디로 회원 조회</a></h3>
+	<h3><a href="/joinFrm">회원가입</a></h3>
+
+</body>
+</html>

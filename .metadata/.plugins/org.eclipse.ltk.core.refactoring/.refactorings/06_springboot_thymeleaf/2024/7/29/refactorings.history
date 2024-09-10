@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;06_springboot_thymeleaf/src/main/resources/templates/ㅅㄷㄴㅅ&apos; to &apos;test&apos;" description="Rename resource &apos;ㅅㄷㄴㅅ&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/templates/ㅅㄷㄴㅅ" name="test" stamp="1721192343717" updateReferences="true"/>
+</session>

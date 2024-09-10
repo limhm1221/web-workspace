@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>AJAX</title>
+<style>
+	.ajax-wrap{
+	width: 800px;
+	margin: 0 auto;
+}
+
+	.ajaxResult {
+	margin-top: 10px;
+	min-height: 100px;
+	border : 1px solid var(--gray5);
+	}
+</style>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+			<main class="content">
+				<section class="section ajax-wrap">
+					<div class="page-title">AJAX</div>
+					
+					<h3>1. 서버호출하기</h3>
+					<a href="/ajax/ajax1">a태그방식으로 호출</a>
+					<button class="btn-point" id="jQ1">서버호출하기</button>
+					
+					<h3>2. 서버호출하면서 데이터 전송</h3>
+					<div class="input-item">
+						<input type="text" id="input2">
+						<button class="btn-point" id="jQ2">전송</button>
+					</div>
+					
+					<h3>3.서버로 데이터 전송하고 서버에서 데이터 받기(기본형데이터)</h3>
+					<div class="input-item">
+						<input type="text" id="su1">
+						<input type="text" id="su2">
+						<button class="btn-point" id="jQ3">더하기</button>
+					</div>
+					<p class="ajaxResult" id="result3"></p>
+					
+					<h3>4. 서버로 데이터 전송하고 서버에서 데이터 받기(객체)</h3>
+					<div class="input-item">
+						<input type="text" id="input4">
+						<button class="btn-point" id="jQ4">회원 정보 조회하기</button>
+					</div>
+					<p class="ajaxResult" id="result4"></p>
+					
+					<h3>5. 서버에서 데이터받기(배열)</h3>
+					<button class="btn-point" id="jQ5">전체회원 조회</button>
+					<p class="ajaxResult" id="result5">
+					
+					<h3>6. 서버로 데이터 전송하고 서버에서 데이터 받기(객체 - jackson)</h3>
+					<div class="input-item">
+						<input type="text" id="input6">
+						<button class="btn-point" id="jQ6">회원 정보 조회하기</button>
+					</div>
+					<p class="ajaxResult" id="result6"></p>
+					
+					
+					<h3>7. 서버에서 데이터받기(배열)</h3>
+					<button class="btn-point" id="jQ7">전체회원 조회</button>
+					<p class="ajaxResult" id="result7">
+					
+				</section>
+			</main>	
+			<script>
+				$("#jQ1").on("click",function(){
+					//비동기요청 보내는 방법(jQuery 방식)
+					$.ajax({
+						url : "/ajax/ajax1", //form의 action 역활
+						type : "get" ,		 //from의 method 역활
+						success : function(){ //비동기요청이 성공적으로 끝나면 호출되는 함수
+							console.log("서버 요청 성공")
+						},
+						error : function(){		//비동기 요청 중 에러가 발생하면 호출되는 함수
+							console.log("서버 요청 중 에러발생");
+						},
+						complete : function(){
+							console.log("성공이든 실패든 무조건 실행되는 함수");
+						}
+					});
+				});
+				
+				$("#jQ2").on("click",function(){
+					const inputValue =$("#input2").val();
+					//비동기 요청을 하면서 컨트롤러에 데이터를 보내고싶으면 data속성에 객체형식으로 전송
+					//data의 속성의 객체 내부의 key값이 name역활, value가 전송되는 데이터
+					$.ajax({
+						url : "/ajax/ajax2",
+						type : "get",
+						data : {input1 : inputValue},
+						success : function(){
+							console.log("서버 요청 성공");
+						},
+						error : function(){
+							console.log("에러 발생");
+						}
+					});
+				});
+				
+				$("#jQ3").on("click",function(){
+					const su1 = $("#su1").val();
+					const su2 = $("#su2").val();
+					
+					$.ajax({
+						url : "/ajax/ajax3",
+						type : "post",
+						data : {num1 : su1, num2 : su2},
+						success : function(data){
+							//비동기요청 성공 시 실행되는 함수의 첫번째 매개변수가 응답받은 데이터(Controller가 보내준 데이터)
+							console.log("서버 응답 값 : " +data);
+							console.log(typeof data);
+							//success함수에서는 서버 요청 결과를 바탕으로 화면에 반영
+							$("#result3").text(su1+" + "+su2+" = "+data);
+						},
+						error : function(){
+							console.log("서버 요청 실패");
+						}
+					});
+				});
+				
+				$("#jQ4").on("click",function(){
+					const inputValue = $("#input4").val();
+					$("#result4").empty();
+					$.ajax({
+						url : "/ajax/ajax4",
+						type : "post",
+						data : {memberId : inputValue},
+						dataType : "json", 		//서버로부터 받는 데이터 타입을 객체형태로 변환
+						success : function(data){
+							console.log(data);
+							console.log(typeof data);
+							//AJAX통해서 받은 JSON문자열을 객체형태로 변환하는 방법
+							//const obj = JSON.parse(data);
+							console.log("서버 요청 성공");
+							$("#result4").append("회원번호 : "+data.memberNo+"<br>");
+							$("#result4").append("아이디 : "+data.memberId+"<br>");
+							$("#result4").append("이름 : "+data.memberName+"<br>");
+							$("#result4").append("전화번호 : "+data.memberPhone+"<br>");
+							$("#result4").append("주소 : "+data.memberAddr+"<br>");
+						},
+						error : function(){
+							$("#result4").append("회원 정보를 찾을 수 없습니다.")
+						}
+					})
+				});
+				
+				$("#jQ5").on("click",function(){
+					$("#result5").empty();
+					$.ajax({
+						url : "/ajax/ajax5",
+						type :"get",
+						dataType : "json",
+						success : function(data){
+							console.log(data);
+							for(let i=0;i<data.length;i++){
+							const div =$("<div>")
+							div.append(data[i].memberNo);
+							div.append("/");
+							div.append(data[i].memberId);
+							div.append("/");
+							div.append(data[i].memberName);
+							div.append("/");
+							div.append(data[i].memberPhone);
+							div.append("/");
+							div.append(data[i].memberAddr);
+							$("#result5").append(div);
+							}
+						},
+						error :  function(){
+							consloe.log("에러")
+						}
+					})
+				})
+				$("#jQ6").on("click",function(){
+				const memberId =$("#input6").val();
+				$("#result6").empty();
+				$.ajax({
+					url : "/ajax/ajax6",
+					type : "get",
+					data : {memberId : memberId},
+					dataType : "json",
+					success : function(data){
+						console.log(data);
+						console.log(typeof data);
+						//AJAX통해서 받은 JSON문자열을 객체형태로 변환하는 방법
+						//const obj = JSON.parse(data);
+						console.log("서버 요청 성공");
+						$("#result6").append("회원번호 : "+data.memberNo+"<br>");
+						$("#result6").append("아이디 : "+data.memberId+"<br>");
+						$("#result6").append("이름 : "+data.memberName+"<br>");
+						$("#result6").append("전화번호 : "+data.memberPhone+"<br>");
+						$("#result6").append("주소 : "+data.memberAddr+"<br>");
+					},
+					error : function(data){
+						console.log("에러");
+					}
+				})
+				})
+				$("#jQ7").on("click",function(){
+					$("#result7").empty();
+					$.ajax({
+						url : "/ajax/ajax7",
+						type :"get",
+						dataType : "json",
+						success : function(data){
+							console.log(data);
+							for(let i=0;i<data.length;i++){
+							const div =$("<div>")
+							div.append(data[i].memberNo);
+							div.append("/");
+							div.append(data[i].memberId);
+							div.append("/");
+							div.append(data[i].memberName);
+							div.append("/");
+							div.append(data[i].memberPhone);
+							div.append("/");
+							div.append(data[i].memberAddr);
+							$("#result7").append(div);
+							}
+						},
+						error :  function(){
+							consloe.log("에러")
+						}
+					})
+				})
+			</script>
+	<th:block th:include="common/footer"></th:block>
+</body>
+</html>

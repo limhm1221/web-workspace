@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>회원 아이디 목록</h1>
+	<hr>
+	<form action="/mybatis/searchUser3" method="get">
+		<table border="1">
+			<tr>
+				<th>선택</th>
+				<th>아이디</th>
+			</tr>
+			<tr th:each="userId : ${list}">
+				<td><input type="checkBox" name="id" th:value="${userId}"></td>
+				<td th:text="${userId}"></td>
+			</tr>
+			<tr>
+				<th colspan="2">
+					<input type="submit" value="선택회원 조회">
+				</th>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

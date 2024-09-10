@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>관리자 페이지</title>
+<style>
+	input[type=checkbox].chk+label{
+		height:24px;
+	}
+	.checkedChangeLevel{
+		width:100%;
+		
+	}
+</style>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+		<main class="content">
+			<section class="section admin-wrap">
+				<div class="page-title">회원관리페이지</div>
+				<table class="tbl tbl-hover">
+					<tr>
+						<th style="width:5%;">선택</th>
+						<th style="width:7%;">번호</th>
+						<th style="width:10%;">아이디</th>
+						<th style="width:10%;">이름</th>
+						<th style="width:15%;">전화번호</th>
+						<th style="width:20%;">주소</th>
+						<th style="width:13%;">가입일</th>
+						<th style="width:10%;">회원등급</th>
+						<th style="width:10%;">등급변경</th>
+					</tr>
+					<tr th:each="m,status : ${list}">
+						<td>
+							<div class="input-wrap">
+								<input type="checkbox" class="chk" th:id="${'chk'+status.count}">
+								<label th:for="${'chk'+status.count}"></label>
+							</div>
+						</td>
+						<td th:text="${m.memberNo}"></td>
+						<td th:text="${m.memberId}"></td>
+						<td th:text="${m.memberName}"></td>
+						<td th:text="${m.memberPhone}"></td>
+						<td th:text="${m.memberAddr}"></td>
+						<td th:text="${m.enrollDate}"></td>
+						<td>
+							<div class="select" th:switch="${m.memberLevel}">
+								<select th:case="1">
+									<option value="1" selected>관리자</option>
+									<option value="2">정회원</option>
+									<option value="3">준회원</option>
+								</select>
+								<select th:case="2">
+									<option value="1">관리자</option>
+									<option value="2" selected>정회원</option>
+									<option value="3">준회원</option>
+								</select>
+								<select th:case="3">
+									<option value="1">관리자</option>
+									<option value="2">정회원</option>
+									<option value="3" selected>준회원</option>
+								</select>
+								
+							</div>
+						</td>		
+						<td>
+							<button class="btn-primary sm changeLevel">등급 변경</button>
+						</td>	
+					</tr>
+					<tr>
+						<td colspan="9">
+							<button class="btn-point lg checkedChangeLevel">선택회원등급변경</button>
+						</td>		
+				</table>
+			</section>
+		</main>
+		<script>
+			$(".changeLevel").on("click",function(){
+				//클릭한 버튼 기준으로 해당 행의 회원 번호를 가지고오는 직업
+				const memberNo = $(this).parent().parent().children().eq(1).text();			
+				//클릭한 버튼 기준으로 선택한 등급을 가지고오는 작업
+				const memberLevel = $(this).parent().prev().children().children().val();
+				//서버전송에 필요한 데이터는 모두 구해옴(회원번호, 선택한 회원 등급)
+				//서버에 데이터를 전송하면서 update요청 -> 1.form / 2. a태그 
+				//a태그 방식으로 전송
+				location.href="/admin/changeLevel?memberNo="+memberNo+"&memberLevel="+memberLevel;
+			});
+			
+			$(".checkedChangeLevel").on("click",function(){
+				const check = $(".chk:checked");
+				if(check.length == 0){ //선택된 회원이없으면 함수 종료
+					return;
+				}
+				//체크된 회원 번호를 모두 저장할 배열
+				const no = new Array();
+				//체크된 회원 등급을 모두 저장할 배열
+				const level = new Array();
+				
+				//체크된 체크박스 기준으로 회원번호와 등급을 가져와서 각각 배열에 push
+				check.each(function(index, item){
+					const memberNo = $(item).parent().parent().next().text();
+					no.push(memberNo);
+					const memberLevel =$(item).parent().parent().parent().find("select").val();
+					level.push(memberLevel)
+				})
+				console.log(no);
+				console.log(level);
+				//화면에서 컨트롤러로 데이터를 전송할때는 문자열 형식이어야 함
+				//배열에 있는 모든 데이터를 특정 구분자로 구분해서 하나의 문자열로 리턴하는 함수-> join
+				location.href="/admin/checkedChangeLevel?no="+no.join("/")+"&level="+level.join("/");
+			});
+		</script>
+	<th:block th:include="common/footer"></th:block>
+	
+</body>
+</html>

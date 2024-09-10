@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>자유게시판</title>
+<style>
+	.board-view-wrap{
+		width: :1200px;
+		margin: 0 auto;
+	}
+	
+	.boardContent{
+		min-height: 300px;
+	}
+</style>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+		<main class="content">
+			<section class="section board-view-warp">
+				<div class="page-title">공지사항</div>
+				<table class="tbl board-view">
+					<tr>
+						<th colspan="6" th:text="${b.boardTitle}"></th>
+					</tr>
+					<tr>
+						<th	style="width:20%;">작성자</th>
+						<td	style="width:20%;" th:text="${b.boardWriter}"></td>
+						<th	style="width:15%;">작성일</th>
+						<td	style="width:15%;" th:text="${b.regDate}"></td>
+						<th	style="width:15%;">조회수</th>
+						<td	style="width:15%;" th:text="${b.readCount}"></td>
+					</tr>
+					<tr>
+						<th>첨푸파일</th>
+						<td colspan="5">
+							<th:block th:each="file : ${n.fileList}">
+								<img src="/image/file.png" width="16px">
+								<a th:href="@{/board/filedown(filename=${file.filename},filepath=${file.filepath})}" th:text="${file.filename}"></a>
+						</td>
+					</tr>
+					<tr>
+						<td class="left" colspan="6">
+							<div class="boardContent" th:text="${b.boardContent}"></div>
+						</td>
+					</tr>
+					<tr>
+					<tr th:if="${session.member != null && session.member.memberId == b.boardWriter}">
+						<td colspan="6">
+							<a th:href="@{/board/updateFrm(boardNo=${b.boardNo})}" class="btn-primary">수정</a>
+							<button class="btn-secondary" th:onclick="boardDelete([[${b.boardNo}]]);">삭제</button>
+							
+					</tr>
+				</table>
+			</section>
+		</main>
+		<script>
+			function boardDelete(boardNo){
+				swal({
+					title:"게시글 삭제",
+					text:"게시글을 삭제하시겠습니까?",
+					icon : "warning",
+					buttons:{
+						cancle:{
+							text:"취소",
+							value : false,
+							visible:true,
+							className:"btn-secondary",
+							closeModal : true
+						},
+						confirm:{
+							text : "삭제",
+							value:true,
+							visible : true,
+							className : "btn-point",
+							closeModal : true
+						}
+					}
+				}).then(function(isConfirm){
+					if(isConfirm){
+						location.href="/board/delete?boardNo="+boardNo;
+					}
+				});	
+			};
+		</script>
+	<th:block th:include="common/footer"></th:block>
+
+</body>
+</html>

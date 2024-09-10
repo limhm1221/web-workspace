@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>마이페이지</title>
+<style>
+	.mypage-container{
+		display: flex;
+		align-items : center;
+	}
+	
+	.mypage-wrap{
+		width:800px;
+		margin : 0 auto;
+	}
+	.my-info-wrap{
+		width:80%;
+		margin : 0 auto;
+	}
+	
+	.my-info-wrap .input-item>input{
+		padding : 0;
+	}
+	
+	.mypage-btn{
+		display : flex;
+		justify-content : center;
+		gap : 50px;
+		padding : 30px 0px;
+	}
+	
+	.mypage-btn>* {
+		width : 25%;
+	}
+</style>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+	<main class="content mypage-container">
+		<section class="section mypage-wrap">
+			<div class="page-title">마이페이지</div>
+			<div class="my-info-wrap">
+				<form action="/member/update2" method="post" autocomplete="off">
+					<table class="tbl">
+						<tr>
+							<th width="30%">회원번호</th>
+							<td class="left" width="70%" th:text="${session.member.memberNo}"></td>
+						</tr>			
+						<tr>
+							<th>아이디</th>
+							<td class="left" th:text="${session.member.memberId}"></td>
+						</tr>
+						<tr>
+							<th>
+								<label for="memberPw">비밀번호</label>
+							</th>
+							<td>
+								<div class="input-item">
+									<input type="password" name="memberPw" id="memberPw" th:value="${session.member.memberPw}">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>이름</th>
+							<td class="left" th:text="${session.member.memberName}"></td>
+						</tr>
+						<tr>
+							<th>
+								<label for="memberPhone">전화번호</label>
+							</th>
+							<td>
+							<div class="input-item">
+								<input type="text" name="memberPhone" id="memberPhone" th:value="${session.member.memberPhone}">
+							</div>
+						</tr>
+						<tr>
+							<th>
+								<label for="memberAddr">주소</label>
+							</th>
+						<td>
+							<div class="input-item">
+								<input type="text" name="memberAddr" id="memberAddr" th:value="${session.member.memberAddr}">
+							</div>
+						</td>
+						</tr>
+						<tr>
+							<th>회원등급</th>
+								<td class="left" th:switch="${session.member.memberLevel}">
+									<span th:case="1">관리자</span>
+									<span th:case="2">정회원</span>
+									<span th:case="3">준회원</span>						
+								</td>
+						</tr>
+						
+						<tr>
+							<th>가입일</th>
+							<td class="left" th:text="${session.member.enrollDate}"></td>
+						</tr>
+					</table>
+					<input type="hidden" name="memberNo" th:value="${session.member.memberNo}">
+					<div class="mypage-btn">
+						<button type="submit" class="btn-primary lg">정보수정</button>
+						<button type="button" class="btn-secondary lg delBtn">회원탈퇴</button>
+						<a th:if="${session.member.memberLevel == 1}" href="/admin/allMember" class="btn-point lg" >관리자 페이지로</a>
+					</div>
+				</form>
+			</div>
+		</section>
+	</main>
+	<script>
+		$(".delBtn").on("click",function(){
+			swal({
+				title : "회원탈퇴",
+				text : "정말 회원을 탈퇴하시겠습니까? ",
+				icon : "warning",
+				buttons : {
+					cancel : {
+						text : "취소",
+						value : false,
+						visible : true,
+						className : "btn-secondary",
+						closeModal : true
+					},
+					confirm : {
+						text: "탈퇴하기",
+						value : true,
+						visible : true,
+						className : "btn-primary",
+						closeModal : true
+					}
+				}
+			}).then(function(isConfirm){
+				if(isConfirm){
+					location.href="/member/delete";
+				}
+			});
+		});
+	</script>
+	<th:block th:include="common/footer"></th:block>
+</body>
+</html>

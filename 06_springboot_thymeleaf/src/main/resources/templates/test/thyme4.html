@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<H1>Thymeleaf if테스트</H1>
+	<hr>
+	<h3 id="test1" th:if="${data1%3 == 0}">3의 배수입니다.</h3>
+	<h3 id="test2" th:if="${data1%3 != 0}">3의 배수가 아닙니다</h3>
+	<h3 id="test3" th:unless="${data1%3 == 0}">3의 배수가 아닙니다.</h3>
+	<hr>
+	<p th:if="${data2 == null}">data2없음</p>
+	<p th:if="${data2 != null}" th:text="${data2}"></p>
+	<hr>
+	<p th:if="${data3 == null}">data3없음</p>
+	<p th:if="${data3 != null}" th:text="${data3}"></p>
+	<hr>
+	<!-- 학생정보가 있으면 학생정보를 출력하고 / 없으면 학생 정보가 없습니다. -->
+	<h3 th:if="${s == null}">학생정보가 없습니다</h3>
+		
+	<ul th:if="${s != null}">
+		<li th:text="${s.name}"></li>
+		<li th:text="${s.age}"></li>
+		<li th:text="${s.addr}"></li>
+	</ul>
+	
+	<th:block th:if="${s != null}">
+	<p th:text="${s.name}"></p>
+	<p th:text="${s.age}"></p>
+	<p th:text="${s.addr}"></p>
+	</th:block>
+</body>
+</html>

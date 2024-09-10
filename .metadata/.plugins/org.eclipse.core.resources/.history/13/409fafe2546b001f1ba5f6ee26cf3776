@@ -1,0 +1,8 @@
+package kr.co.iei.admin.controller;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin("*")
+public class AdminController {
+
+}

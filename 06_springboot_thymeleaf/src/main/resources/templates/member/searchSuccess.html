@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>회원 정보</h1>
+	<hr>
+	
+	<ul>
+
+		<li>회원번호 : <span th:text="${m.memberNo}"></span></li>
+		<li>회원아아디 : <span th:text="${m.memberId}"></span></li>
+		<li>회원 비밀번호: <span th:text="${m.memberPw}"></span></li>
+		<li>회원이름 : <span th:text="${m.memberName}"></span></li>
+		<li>전화번호 : <span th:text="${m.memberPhone}"></span></li>
+		<li>회원주소 : <span th:text="${m.memberAddr}"></span></li>
+		<li>회원등급 : <span th:text="${m.memberLevel}"></span></li>
+		<li>회원가입일 : <span th:text="${m.enrollDate}"></span></li>
+	</ul>
+	
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>지도</title>
+<style>
+	.map-wrap{
+		width:1200px;
+		margin: 0 auto;
+	}
+	
+	.address-wrap{
+		width: 500px;
+		margin-bottom: 50px;
+	}
+</style>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fp841d20aq&submodules=geocoder"></script>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+		<main class="content">
+			<section class="section">
+				<div class="page-title">지도오 API</div>
+				
+				<h2>1. 다음 주소찾기 API</h2>
+				<h3><a href="https://postcode.map.daum.net/guide">다음 주소찾기 API 개발 가이드</a></h3>
+				
+				<div class="address-wrap">
+					<div class="post-code-wrap">
+						<div class="input-item">
+							<input type="text" name="postcode" id="postcoed" readonly>
+							<button class="btn-primary" id="searchBtn">주소찾기</button>
+						</div>
+					</div>
+					<div class="detail-address-wrap">
+						<div class="input-item">
+							<input type="text" name="address" id="address" readonly>
+						</div>
+						<div class="input-item">
+							<input type="text" name="detailAddress" id="detailAddress" >
+						</div>
+					</div>		
+				</div>
+				<h2>2. 네이버지도</h2>
+				<h3><a href="https://navermaps.github.io/maps.js.ncp/docs/index.html">네이버지도 API개발 가이드 </a></h3>
+				<div id="map" style="width:100%; height:500px;"></div> 
+			</section>
+		</main>
+		<script>
+		const map = new naver.maps.Map("map",{
+            center : new naver.maps.LatLng(37.533837,126.896836),
+            zoom : 17,
+            zoomControl : true,
+            zoomControlOptions : {
+                position : naver.maps.Position.TOP_RIGHT,
+                style : naver.maps.ZoomControlStyle.SMALL
+            }
+        
+        });
+        const marker = new naver.maps.Marker({
+            position : new naver.maps.LatLng(37.533837,126.896836),
+            map : map
+        });
+        
+        let contentString = [
+            "<div class='iw_inner'>",
+            "   <h3>KH정보교육원</h3>",
+            "   <p>서울시 영등포구 선유2로 57 이레빌딩 19F A강의장</p>",
+            "</div>"
+        ].join("");
+        
+        let infoWindow = new naver.maps.InfoWindow();
+        //marker 클릭 시 이벤트 적용
+        naver.maps.Event.addListener(marker,"click",function(e){
+            //infoWindow 객체에 우리가 만들어둔 문자열을 세팅
+            infoWindow = new naver.maps.InfoWindow({
+                content : contentString
+            });
+            infoWindow.open(map,marker);
+        });
+        //지도에 클릭이벤트 적용
+        naver.maps.Event.addListener(map,"click",function(e){
+            console.log(e);
+            map.setCenter(e.coord);//지도의 center 속성값 변경(지도 중심위치 변경)
+            marker.setPosition(e.coord);//마커위치 변경 포지션을 변경해줌 
+            if(infoWindow.getMap()){ 		//지도에 infoWindow가 열려있으면
+            	infoWindow.close();			//infoWindow 닫기
+            }
+            //이벤트 정보에서 클릭한 위치의위도/경도값을 알 수 있음 
+            //위도/경도를 알고있으면 해당 위치의 주소를 구해올 수 있음 =-> reverse geocode
+            //주소를통해서 위 경도를 알고싶으면 -> geocode
+            naver.maps.Service.reverseGeocode({
+            	location : e.coord
+            },function(status,response){
+            	if(status != naver.maps.Service.Status.OK){
+            		return alert("주소를 찾을 수 없습니다.");
+            	}
+            	console.log(response);
+            	const address = response.result.items[0].address;
+            	contentString =[
+            		 "<div class='iw_inner'>",
+                   	 "		<p>"+address+"</p>",
+                     "</div>"
+            	].join("");
+            });
+        });
+			
+			
+			$("#searchBtn").on("click",function(){
+				 new daum.Postcode({
+				        oncomplete: function(data) {
+				            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+				            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+				        	console.log(data);
+				        	$("#postCode").val(data.zonecode);
+				        	$("#address").val(data.roadAddress);
+				        	$("#detailAddress").focus();
+				        }
+				    }).open();
+			})
+		</script>
+	<th:block th:include="common/footer"></th:block>
+</body>
+</html>

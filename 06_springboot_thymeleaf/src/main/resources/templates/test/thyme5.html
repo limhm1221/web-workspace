@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Thymeleaf switch 테스트</h1>
+	<hr>
+	<p th:if="${num == 10}">10입니다.</p>
+	<p th:if="${num == 20}">20입니다.</p>
+	<p th:if="${num == 30}">30입니다.</p>
+	<p th:if="${num == 40}">40입니다.</p>
+	<hr>
+	<th:block th:switch="${num}">
+		<p th:case="10">10입니다</p>
+		<p th:case="20">20입니다</p>
+		<p th:case="30">30입니다</p>
+		<p th:case="40">40입니다</p>
+		<p th:case="*">기타입니다</p>
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="/js/jquery-3.6.0.js"></script>
+</head>
+<body>
+	<h1>비밀번호 변경하기</h1>
+	<hr>
+	<div>
+		<label for="oldPw">기존 비밀번호 입력 : </label>
+		<input type="password" id="oldPw">
+		<button type="button" th:onclick="oldPwCheck([[${session.user.userId}]],this)">입력</button>
+	</div>
+	<form action="/user/changePw" id="changePwFrm" method="post" style="display:none;">
+		<div>
+			<label for="userPw">새 비밀번호 입력</label>
+			<input type="password" name="userPw" id="userPw">
+		</div>
+		<div>
+			<label for="userPwRe">새 비밀번호 확인</label>
+			<input type="password" id="userPwRe">
+		</div>
+		<div>
+			<input type="hidden" name="userNo" th:value="${session.user.userNo}">
+			<input type="submit" value="변경하기 " onclick="return checkPw();">
+		</div>
+	</form>
+	<script>
+		function oldPwCheck(userId,obj){
+			const userPw=$("#oldPw").val();
+			
+			$.ajax({
+				url : "/user/oldPwCheck",
+				data : {userId:userId, userPw : userPw},
+				type : "post",
+				success : function(data){
+					if(data ==1){
+						$(obj).parent().slideUp();
+						$("#changePwFrm").slideDown();
+					}else{
+						alert("다시치세요.")
+					}
+				},
+				error : function(err){
+					console.log(err);
+				}
+			})
+		}
+		function checkPw(){
+			const pw = $("#userPw").val();
+			const pwRe = $("#userPwRe").val();
+			if(pw != pwRe){
+				alert("비밀번호가 일치하지 않습니다 .");
+				return false;
+			}
+		}
+	</script>
+</body>
+</html>
+

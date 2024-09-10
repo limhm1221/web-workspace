@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>결제</title>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+		<main class="content">
+			<section class="section">
+				<div class="page-title">결제API</div>
+				<h3><a href="https://developers.portone.io/docs/ko/readme?v=v1">포트원 결제 API개발 가이드</a></h3>
+				<div class="pay-wrap" style="width:300px;">
+					<div class="input-item">
+						<input type="text" id="pay" placeholder="결제 금액 입력">
+						<button id="payBtn" class="btn-primary">결제하기</button>
+					</div>
+				</div>
+			</section>
+		</main>
+		<script>
+			$("#payBtn").on("click",function(){
+				const price = $("#pay").val();
+				const date = new Date();
+				const dateString = date.getFullYear()+""+(date.getMonth()+1)+""
+								  +date.getDate()+""+date.getHours()+""
+								  +date.getMinutes()+""+date.getSeconds();
+				//포트원 라이브러리 연동
+				IMP.init("imp87573765");
+				//결제창 연동
+				IMP.request_pay(
+			  {
+				 //pg: "danal_tpay.9810030929",
+				//pg: "kakaopay.TC0ONETIME",
+			    //pg: "html5_inicis.INIpayTest", //테스트 시 html5_inicis.INIpayTest 기재
+			    pay_method: "card",
+			    merchant_uid: "order_no_"+dateString, //상점에서 생성한 고유 주문번호
+			    name: "주문명:결제테스트",
+			    amount: price,
+			    buyer_email: "test@portone.io",
+			    buyer_name: "구매자이름",
+			    buyer_tel: "010-1234-5678", //필수 파라미터 입니다.
+			    buyer_addr: "서울특별시 강남구 삼성동",
+			    buyer_postcode: "123-456"
+			 	 },
+			 	 function(rsp){
+			 		 if(rsp.success){
+			 			 alert("결제성공");
+			 			 //주문정보 , 결제정보 데이터베이스 insert, 다음페이지로 이동
+			 			 
+			 		 }else{
+			 			 alert("결제실패");
+			 		 }
+			 	 }
+			);
+		});
+		</script>
+	<th:block th:include="common/footer"></th:block>	
+</body>
+</html>

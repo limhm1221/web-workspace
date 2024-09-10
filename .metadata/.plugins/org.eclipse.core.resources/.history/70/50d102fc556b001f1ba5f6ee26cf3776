@@ -1,0 +1,17 @@
+package kr.co.iei.admin.model.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.co.iei.board.model.dao.BoardDao;
+import kr.co.iei.member.model.dao.MemberDao;
+
+@Service
+public class AdminService {
+	
+	@Autowired
+	private BoardDao boardDao;
+	@Autowired
+	private MemberDao memberDao;
+
+}

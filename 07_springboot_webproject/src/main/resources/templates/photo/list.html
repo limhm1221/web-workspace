@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>사진 게시판</title>
+<style>
+	.photo-list-wrap{
+		width: 1200px;
+		margin: 0 auto;
+	}
+	
+	.write-btn{
+		display: inline-block;
+	}
+	
+	.btn-zone{
+		text-align: center;
+		margin: 20px 0px;
+	}
+</style>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+		<main class="content">
+			<section class="section photo-list-wrap">
+				<div class="page-title">사진게시판</div>				
+				<div>
+					<a th:if="${session.member != null}" href="/photo/writeFrm" class="btn-point write-btn">글쓰기</a>
+				</div>
+				<ul class="photoWrapper posting-wrap"></ul>
+				<div class="btn-zone">
+					<button class="btn-point lg" id="more-btn">더보기</button>
+				</div>
+			</section>
+		</main>
+		<script th:inline = "javascript"> 
+			const totalCount =[[${totalCount}]]//처음페이지 들어올 때 조회해온 전체 게시물 수
+			let = currentCount=0; //현재까지 읽어온 게시물 수를 저장할 변수
+			let start = 1;		  //추가로 가져올 게시물의 시작번호(더보기 클릭시 rnum의 start번호)
+			
+			
+			$("#more-btn").on("click",function(){
+				const amount = 8;
+				$.ajax({
+					url : "/photo/more",
+					type : "get",
+					data : {start : start , amount : amount},
+				success : function(data){
+					console.log(data);
+					for(let i=0;i<data.length;i++){
+						const p = data[i];
+						const li = $("<li>");
+						li.addClass("posting-item");
+						
+						const imgDiv = $("<div>");
+						imgDiv.addClass("posting-img");
+						
+						const img = $("<img>");
+						img.attr("src","/photo/"+p.photoImg);
+						//<img src="db로 조회한 이미지 경로 ">
+						
+						imgDiv.append(img);
+						/*
+						<div class="posting-img">
+							<img = src="db로 조회한 이미지 경로">
+						</div>
+						*/
+						
+						const infoDiv = $("<div>");
+						infoDiv.addClass("posting-info");
+						
+						const titleDiv = $("<div>")
+						titleDiv.addClass=("posting-title");
+						titleDiv.text(p.photoTitle);
+						
+						const subInfoDiv =$("<div>");
+						subInfoDiv.addClass("posting-sub-info");
+						
+						const writerSpan = $("<span>")
+						writerSpan.text(p.photoWriter);
+						
+						subInfoDiv.append(writerSpan);
+						/*
+						<div class="posting-subinfo">
+							<span 들어감 >
+						</div>
+						*/
+						infoDiv.append(titleDiv).append(subInfoDiv);
+						
+						li.append(imgDiv).append(infoDiv);
+						
+						$(".photoWrapper").append(li);
+					}
+					
+					//화면추가가 끝난 후
+					//다음 더보기누르면 그이후데이터를 가져오기위한 설정
+					start = start + amount;
+					currentCount = currentCount + data.length;
+					//더이상 읽어올 게시물이 없으면 더보기 버튼 삭제
+					if (currentCount == totalCount){
+						$("#more-btn").remove();
+					}
+				},
+				error : function(){
+					console.log("error");
+				}
+				})
+			});
+			//최초에 페이지에 접속하면 더보기 버튼을 강제로 한번 클릭
+		$("#more-btn").click();
+		</script>
+
+<th:block th:include="common/footer"></th:block>
+</body>
+</html>

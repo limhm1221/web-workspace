@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>THymeLeaf 객체 데이터 출력</h1>
+<hr>
+	<ul>
+		<li th:text="${s1.name}"></li>
+		<li th:text="${s1.age}"></li>
+		<li th:text="${s1.addr}"></li>	
+		<li th:text="${s1.testData}"></li>
+		 <!-- s1.(get를 호출) -->
+	</ul>
+	
+	<ul>
+		<li th:text="${s2.name}"></li>
+		<li th:text="${s2.age}"></li>
+		<li th:text="${s2.addr}"></li>
+		<li th:text="${s2.testData}"></li>	
+	</ul>
+</body>
+</html>

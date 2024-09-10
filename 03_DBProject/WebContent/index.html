@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>DB 프로젝트 - 임형묵</h1>
+	<hr>
+	<!-- 
+		전체 회원 조회
+		1. DB 작업 필요한지 -> O
+		2. query : select * from member_tbl order by 1
+		3. query에 사용자한테 입력받아야 하는 데이터가 있는지 -> X
+			3-1. 사용자한테 입력받아야할 데이터가 있으면 -> 입력양식이 있는 HTML페이지로 이동
+			3-2. 사용자한테 입력받야아할 데이터가 없으면 -> Servlet을 호출
+	 -->
+	 <h3><a href="/allMember">1. 전체 회원 조회</a></h3>
+	 <!-- 
+	 	아이디로 회원 조회
+	 	1. DB 작업 필요한지 -> O
+	 	2. query : select * from member_tbl where member_id = ?
+	 	3. query에 사용자한테 입력받아야 하는 데이터가 있는지 -> O
+	 		3-1. 사용자한테 입력받아야할 데이터가 있으면 -> 입력양식이 있는 HTML페이지로 이동
+	  -->
+	  <h3><a href="/html/searchIdFrm.html">2. 아이디로 회원 조회</a></h3>
+	  <!-- 
+	  회원가입 
+	  1. DB 작업 필요한지 -> O
+	  2. query : insert into member_tbl values(member_seq.nextval,?,?,?,?,?,3,to_char(sysdate,'yyyy-mm-dd'))
+	  3. query에 사용자한테 입력받아야하는 데이터가 있는지 -> O
+	  3-1. 사용자한테 입력받아야할 데이터가 있으면 -> 입력양식이 있는 HTML페이지로 이동
+	  -->
+	  <h3><a href="/html/joinFrm.html">3. 회원가입 </a></h3>
+</body>
+</html>

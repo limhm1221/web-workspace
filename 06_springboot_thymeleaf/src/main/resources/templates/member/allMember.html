@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<h1>전체회원조회</h1>
+	<hr>
+	<table border="1">
+		<tr>
+			<th>회원번호</th>
+			<th>아아디</th>
+			<th>비밀번호</th>
+			<th>이름</th>
+			<th>전화번호</th>
+			<th>주소</th>
+			<th>회원등급</th>
+			<th>가입일</th>
+		</tr>
+		<tr th:each="m : ${list}">
+			<td th:text="${m.memberNo}"></td>
+			<td th:text="${m.memberId}"></td>
+			<td th:text="${m.memberPw}"></td>
+			<td th:text="${m.memberName}"></td>
+			<td th:text="${m.memberPhone}"></td>
+			<td th:text="${m.memberAddr}"></td>
+			<td th:text="${m.memberLevel}"></td>
+			<td th:text="${m.enrollDate}"></td>
+			
+	</table>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- 구글 아이콘 -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<!-- jquery -->
+<script src="/js/jquery-3.6.0.js"></script>
+<!-- 기본 CSS -->
+<link rel="stylesheet" href="/css/default.css" />
+<!-- 기본 js -->
+<script src="/js/default.js"></script>
+<script src="/js/sweetalert.min.js"></script>
+
+	<header class="header">
+		<div>
+			<div class="logo">
+				<a href="/"> zz Mook`s world zz</a>
+			</div>
+			<nav class="nav">
+				<ul>
+					<li><a href="/notice/list?reqPage=1">공지사항 </a></li>
+					<li><a href="/board/list?reqPage=1">자유게시판</a></li>
+					<li><a href="/ajax/main">AJAX</a></li>
+					<li><a href="/photo/list">사진게시판</a></li>
+					<li><a href="#">API</a>
+						<ul class="sub-menu">
+							<li><a href="/api/email">이메일</a></li>
+							<li><a href="/api/pay">결제</a></li>
+							<li><a href="/api/map">지도</a></li>
+							<li><a href="/api/busan">부산맛집</a></li>
+						</ul></li>
+				</ul>
+			</nav>
+
+			<ul class="user-menu">
+			<th:block th:if="${session.member} == null">
+				<li><a href="/member/loginFrm">로그인</a></li>
+				<li><a href="/member/joinFrm">회원가입</a></li>
+			</th:block>
+			<th:block th:if="${session.member} != null">
+				<li><a href="/member/mypage2" th:text="${session.member.memberName}"></a></li>
+				<li><a href="/member/logout">로그아웃</a></li>
+			</th:block>
+			</ul>
+		</div>
+	</header>

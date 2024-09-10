@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.iei.user.model.dao.UserDao">
+  	
+  	<!-- id를 해당하는 매핑해야 할 메소드 이름과 일치 
+  		 resultType은 조회결과를 어떤 타입으로 저장할지 지정(DTO의 Alias설정이 되있어야함)
+  		 별칭이 지정되어있지 않으면 resultType에 패키지부터 클래스 풀경로를 작성
+		쿼리문 내부에서 사용할 자바 데이터는 인터페이스의 메소드가 받은 객체에서 꺼내서 사용
+  	 -->
+  	<select id="selectOneUser" resultType="user">
+  		select * from user_tbl where user_id=#{userId} 
+  			<!-- 
+  			<if test="userPw != null">
+  				and user_pw=#{userPw}
+  			</if>
+  			 -->
+  	</select>
+  	
+  	<select id="CheckId" resultType="user">
+  		select user_no,user_id,user_name from user_tbl
+  	</select>
+  	
+  	<!-- 
+  		조회결과가 단일 User를 리턴할지, List를 리턴할지의 결정은 dao interface의 메소드 리턴타입으로 결정
+  		List 내부에 들어갈 데이터 형태를 resultType에 명시
+  	 -->
+  	<select id="selectAllUser" resultType="user">
+  		select * from user_tbl
+  	</select>
+  	
+  	
+  	<!-- 
+  		insert,update,delete를 수정할때는 insert,update,delete 태그를 사용해서 쿼리 작성
+  		-> 이때는 쿼리문 수행 결과를 int로 리턴(변경된 행의 수 리턴)
+  		-> 결과타입이 이미 정해져있기 때문에 resultType을 작성하지 않음
+  	 -->
+  	<insert id="insertUser" >
+  		insert into user_tbl values(user_seq.nextval,#{userId},#{userPw},#{userName})
+  	</insert>
+  	
+  	<update id="userUpdate">
+  		update user_tbl set user_name=#{userName} where user_no=#{userNo}
+  	</update>
+  	
+  	
+  	<delete id="deleteUser">
+  		delete from user_tbl where user_no=#{userNo}
+  	</delete>
+  	
+  	<select id="selectUserIdOrName" resultType="user">
+  		select * from user_tbl where 
+		<choose>
+			<when test="type.equals('id')">
+				user_id
+			</when>
+			<when test="type.equals('name')">
+				user_name
+			</when>
+		</choose>
+		 like '%'||#{keyword}||'%'
+  	</select>
+  	
+  	<select id="selectUserIdOrName2" resultType="user">
+  				select * from user_tbl 
+  			<trim prefix="where" prefixOverrides="and|or"> <!-- 하나라도 작동하면 where 붙임 -->
+  				<if test="!userId.equals('')">
+  					user_id like '%'||#{userId}||'%'
+  				</if>
+  				<if test="!userName.equals('')">
+  					user_name like '%'||#{userName}||'%'
+  				</if>
+  			</trim>
+  				<!--  
+  				where 
+  				<choose>
+  					<when test="!userId.equals('') and !userName.equals('')">
+  						user_id like '%'||#{userId}||'%' and user_name like '%'||#{userName}||'%'
+  					</when>
+  					<when test="!userId.equals('') and userName.equals('')">
+  						user_id like '%'||#{userId}||'%'
+  					</when>
+  					<otherwise> < 이게 마지막 else 
+  						user_name like '%'||#{userName}||'%'
+  					</otherwise>
+  				</choose>
+  				 -->
+  	</select>
+  	
+  	<select id="selectAllId" resultType="String">
+  		select user_id from user_tbl 
+  	</select>
+  	
+  	
+  	<select id="searchUser" resultType="user">
+  		select * from user_tbl 
+  		where user_id in
+  		<foreach collection="array" item="userId" open="(" close=")" separator=",">
+  		#{userId}
+  		</foreach> 
+  	</select>
+  	
+  	<select id="test" resultType="user">
+  	<![CDATA[ 				
+  		select * from user_tbl where user_no < 20
+  	]]>
+  	<!-- <![CDATA[]] 이부분안에선 동적쿼리 못씀 , 부등호 표현할때 사용 -->
+  	</select> 
+  	
+  	<update id="changePw">
+  		update user_tbl set user_pw=#{userPw} where user_no=#{userNo}
+  	</update>
+</mapper>

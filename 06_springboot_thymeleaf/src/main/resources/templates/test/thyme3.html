@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Thymeleaf List 데이터 출력</h1>
+	<hr>
+	<h3 th:text="${list1[0]}"></h3>
+	<h3 th:text="${list1[1]}"></h3>
+	<hr>
+	<ul>
+		<li th:text="${list2[0].name}"></li>
+		<li th:text="${list2[0].age}"></li>
+		<li th:text="${list2[0].addr}"></li>
+	</ul>
+	
+	<ul>
+		<li th:text="${list2[1].name}"></li>
+		<li th:text="${list2[1].age}"></li>
+		<li th:text="${list2[1].addr}"></li>
+	</ul>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>공지사항</title>
+<style>
+	.notice-view-wrap{
+		width: :1200px;
+		margin: 0 auto;
+	}
+	
+	.noticeContent{
+		min-height: 300px;
+	}
+</style>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+		<main class="content">
+			<section class="section notice-view-warp">
+				<div class="page-title">공지사항</div>
+				<table class="tbl notice-view">
+					<tr>
+						<th colspan="6" th:text="${n.noticeTitle}"></th>
+					</tr>
+					<tr>
+						<th	style="width:20%;">작성자</th>
+						<td	style="width:20%;" th:text="${n.noticeWriter}"></td>
+						<th	style="width:15%;">작성일</th>
+						<td	style="width:15%;" th:text="${n.regDate}"></td>
+						<th	style="width:15%;">조회수</th>
+						<td	style="width:15%;" th:text="${n.readCount}"></td>
+					</tr>
+					<tr>
+						<th>첨푸파일</th>
+						<td colspan="5">
+							<th:block th:each="file : ${n.fileList}">
+								<img src="/image/file.png" width="16px">
+								<a th:href="@{/notice/filedown(filename=${file.filename},filepath=${file.filepath})}" th:text="${file.filename}"></a>
+						</td>
+					</tr>
+					<tr>
+						<td class="left" colspan="6">
+							<div class="noticeContent" th:utext="${n.noticeContent}"></div>
+						</td>
+					</tr>
+					<tr>
+					<tr th:if="${session.member != null && session.member.memberId == n.noticeWriter}">
+						<td colspan="6">
+							<a th:href="@{/notice/updateFrm(noticeNo=${n.noticeNo})}" class="btn-primary">수정</a>
+							<button class="btn-secondary" th:onclick="noticeDelete([[${n.noticeNo}]]);">삭제</button>
+							
+					</tr>
+				</table>
+				
+				
+				
+				<!-- 댓글입력 -->
+				<div th:if="${session.member !=null}" class="inputCommentBox">
+					<form action="/notice/insertComment" method="post">
+						<ul>
+							<li>
+								<span class="material-icons">account_box</span>
+							</li>
+							<li>
+								<input type="hidden" name="noticeCommentWriter" th:value="${session.member.memberId}">
+								<input type="hidden" name="noticeRef" th:value="${n.noticeNo}">
+								<div class="input-item">
+									<textarea name="noticeCommentContent"></textarea>
+								</div>
+							</li>
+							<li>
+								<button type="submit" class="btn-primary">등록</button>
+							</li>
+						</ul>
+					</form>
+				</div>
+				
+				<!-- 댓글 출력 -->
+				<div class="commentBox">
+					<th:block th:each="nc : ${n.commentList}">
+						<ul class="posting-comment">
+							<li>
+								<span class="material-icons">account_box</span>
+							</li>
+							<li>
+								<p class="comment-info">
+									<span th:text="${nc.noticeCommentWriter}"></span>
+									<span th:text="${nc.noticeCommentDate}"></span>
+									<span class="like-box">
+										<span th:if="${nc.isLike == 1}" class="material-icons" th:onclick="likePush(this,[[${nc.noticeCommentNo}]])">thumb_up_alt</span>
+										<span th:if="${nc.isLike == 0}" class="material-icons" th:onclick="likePush(this,[[${nc.noticeCommentNo}]])">thumb_up_off_alt</span>
+										<span th:text="${nc.likeCount}"></span>
+									</span>
+								</p>
+								<p class="comment-content" th:text="${nc.noticeCommentContent}"></p>
+								<div class="input-item" style="display:none;">
+									<textarea name="noticeCommentContent" th:text="${nc.noticeCommentContent}"></textarea>
+								</div>
+								<p class="comment-link">
+									<th:block th:if="${session.member !=null}">
+										<th:block th:if="${session.member.memberId == nc.noticeCommentWriter}">
+											<a href ="javascript:void(0)" th:onclick="modifyComment(this,[[${nc.noticeCommentNo}]],[[${n.noticeNo}]]);">수정</a>
+											<a href ="javascript:void(0)" th:onclick="deleteComment(this,[[${nc.noticeCommentNo}]],[[${n.noticeNo}]]);">삭제</a>
+										</th:block>
+										<a href="javascript:void(0)" class="recShow">답글달기</a>
+									</th:block>
+								</p>
+							</li>
+						</ul>
+						
+						<!-- 대댓글 작성 양식 -->
+						<div th:if="${session.member != null}" class="inputCommentBox inputRecommentBox" >
+							<form action="/notice/insertComment" method="post">
+								<ul>
+									<li>
+										<span class="material-icons">subdirectory_arrow_right</span>
+									</li>
+									<li>
+										<input type="hidden" name="noticeCommentWriter" th:value="${session.member.memberId}">
+										<input type="hidden" name="noticeRef" th:value="${n.noticeNo}">
+										<input type="hidden" name="noticeCommentRef" th:value="${nc.noticeCommentNo}">
+										<div class="input-item">
+											<textarea name="noticeCommentContent"></textarea>
+										</div>
+									</li>
+									<li>
+										<button type="submit" class="btn-primary">등록</button>
+									</li>
+								</ul>
+							</form>
+						</div>
+						<!-- 출력한 댓글의 대댓글 출력 -->
+						<ul class="posting-comment reply" th:each="ncc : ${n.reCommentList}" th:if="${nc.noticeCommentNo == ncc.noticeCommentRef}">
+							<li>
+								<span class="material-icons">subdirectory_arrow_right</span>
+								<span class="material-icons">account_box</span>
+							</li>
+							<li>
+								<p class="comment-info">
+									<span th:text="${ncc.noticeCommentWriter}"></span>
+									<span th:text="${ncc.noticeCommentDate}"></span>
+									<span class="like-box">
+										<span th:if="${ncc.isLike ==1}" class="material-icons" th:onclick="likePush(this,[[${ncc.noticeCommentNo}]])">thumb_up_alt</span>
+										<span th:if="${ncc.isLike ==0}" class="material-icons" th:onclick="likePush(this,[[${ncc.noticeCommentNo}]])">thumb_up_off_alt</span>
+										<span th:text="${ncc.likeCount}">0</span>
+									</span>
+								</p>
+								<p class="comment-content" th:text="${ncc.noticeCommentContent}"></p>
+								<div class="input-item" style="display:none;">
+									<textarea name="noticeCommentContent" th:text="${ncc.noticeCommentContent}"></textarea>
+								</div>
+								<p class="comment-link">
+									<th:block th:if="${session.member != null && session.member.memberId == ncc.noticeCommentWriter}">
+										<a href="javascript:void(0)" th:onclick="modifyComment(this,[[${ncc.noticeCommentNo}]],[[${n.noticeNo}]]);">수정</a>
+										<a href="javascript:void(0)" th:onclick="deleteComment(this,[[${ncc.noticeCommentNo}]],[[${n.noticeNo}]]);">삭제</a>
+									</th:block>
+								</p>
+							</li>
+						</ul>
+					</th:block>
+				</div>
+			</section>
+		</main>
+		<script>
+			function modifyComment(obj, noticeCommentNo, noticeNo){
+			//숨겨놓은 textarea를 화면에 보여줌
+			$(obj).parent().prev().show();
+			//화면에 보이던 댓글내용을 숨김
+			$(obj).parent().prev().prev().hide();
+			
+			//수정버튼 - > 수정완료 버튼으로 
+			$(obj).text("수정완료");
+			$(obj).attr("onclick","modifyComplete(this,"+noticeCommentNo+","+noticeNo+");");
+	
+			//삭제버튼 -> 수정취소 버튼으로
+			$(obj).next().text("수정취소");
+			$(obj).next().attr("onclick","modifyCancle(this,"+noticeCommentNo+","+noticeNo+");");
+			
+			//답글달기버튼이 있는경우 화면에서 안보이게 처리
+			$(obj).next().next().hide();
+			
+			}
+			function modifyComplete(obj, noticeCommentNo, noticeNo){
+				//자바스크립트에서 form태그를 생성해서 전송하는 작업
+				//1. form태그 생성
+				const form =$("<form>");
+				//1-1. form태그의 속성 설정
+				form.attr("action","/notice/updateComment");
+				form.attr("method","post");
+				form.hide();
+				//2. form태그 내부에 전송하고 싶은 데이터를 생성
+				const noticeCommentNoInput = $("<input>");
+				noticeCommentNoInput.attr("type","text");
+				noticeCommentNoInput.attr("name","noticeCommentNo");
+				noticeCommentNoInput.val(noticeCommentNo);
+				const noticeRefInput =$("<input type='text' name='noticeRef'>");
+				noticeRefInput.val(noticeNo);
+				
+				//3. 수정된 댓글이 입력되어있는 textarea(textarea를 감싼 div) 가져옴
+				const noticeCommentContent = $(obj).parent().prev().clone();
+				//4. form태그에 추가
+				form.append(noticeCommentNoInput).append(noticeRefInput).append(noticeCommentContent);
+			
+				//5. 만들어진 form태그를 현재 문서 내부에 포함 
+				$("body").append(form);
+				//6. form태그 submit
+				form.submit();
+			};
+			function modifyCancle(obj, noticeCommentNo, noticeNo){
+				//textarea 숨김
+				$(obj).parent().prev().hide();
+				//기존 댓글내용을 다시 보여줌
+				$(obj).parent().prev().prev().show();
+				
+				//수정완료 -> 수정
+				$(obj).prev().text("수정")
+				$(obj).prev().attr("onclick","modifyComment(this,"+noticeCommentNo+","+noticeNo+");");
+			
+				//수정취소 - > 삭제
+				$(obj).text("삭제");
+				
+				$(obj).attr("onclick","deleteComment(this,"+noticeCommentNo+","+noticeNo+");");
+		
+				$(obj).next().show();
+			}
+			function deleteComment(obj, noticeCommentNo, noticeNo){
+					if(confirm("댓글을 삭제하시겠습니까 ?")){
+						location.href="/notice/deleteComment?noticeCommentNo="+noticeCommentNo+"&noticeRef="+noticeNo;
+						
+					}
+			};
+		
+		
+		$(".recShow").on("click",function(){
+			//답글달기 버튼 중 클릭한 답글달기 버튼이 몇번째 버튼인지 조회
+			const index=$(".recShow").index(this);
+			if($(this).text()==="답글달기"){
+				$(this).text("취소");
+			}else{
+				$(this).text("답글달기");
+			}
+			$(".inputRecommentBox").eq(index).toggle();
+		});
+			function noticeDelete(noticeNo){
+				swal({
+					title:"게시글 삭제",
+					text:"게시글을 삭제하시겠습니까?",
+					icon : "warning",
+					buttons:{
+						cancle:{
+							text:"취소",
+							value : false,
+							visible:true,
+							className:"btn-secondary",
+							closeModal : true
+						},
+						confirm:{
+							text : "삭제",
+							value:true,
+							visible : true,
+							className : "btn-point",
+							closeModal : true
+						}
+					}
+				}).then(function(isConfirm){
+					if(isConfirm){
+						location.href="/notice/delete?noticeNo="+noticeNo;
+					}
+				});	
+			};
+			
+			function likePush(obj, noticeCommentNo){
+				//현재 상태를 구분  -> 지금 클릭한 행동이 좋아요를 누를건지 /좋아요 취소를 누른건지 구분
+				const currentText = $(obj).text();
+				//thumb_up_off_alt		thumb_up_alt
+				const isLike = (currentText == "thumb_up_off_alt")?0:1;
+				console.log(isLike);
+				$.ajax({
+					url : "/notice/likePush",
+					data : {noticeCommentNo : noticeCommentNo, isLike : isLike},
+					type : "post",
+					success : function(data){
+						if(data == -10){
+							swal({
+								title : "로그인 필요",
+								text : "로그인 후 이용해 주세요",
+								icon : "info"
+								});
+							}else if(data == -1){
+								swal({
+									title : "데이터 처리 오류",
+									text : "잠시 후 다시 시도해주세요",
+									icon : "warning"
+									});
+							}else{
+								if(isLike == 0){
+									//아이콘 변경
+									$(obj).text("thumb_up_alt")
+								}else{
+									$(obj).text("thumb_up_off_alt");
+								}
+								//현재 좋아요 갯수 변경
+								$(obj).nextAll().last().text(data);
+							}
+					},
+					error : function(){
+						console.log(error)
+					}
+				})
+			}
+		</script>
+	<th:block th:include="common/footer"></th:block>
+</body>
+</html>

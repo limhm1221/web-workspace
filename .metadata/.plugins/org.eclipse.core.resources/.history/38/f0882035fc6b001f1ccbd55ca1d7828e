@@ -1,0 +1,5 @@
+package kr.co.iei.chat.model.service;
+
+public class AllMemberChatHandler {
+
+}

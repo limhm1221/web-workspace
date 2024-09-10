@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>나의 첫번째 웹사이트(임형묵)</h2>
+	<hr>
+	<h3><a href="/request">1. 서버 호출하기(servlet 호출)</h3>
+	<h3><a href="/response">2. 서버 호출하고 응답 받기</a></h3>
+	<h3><a href="/sendData1?name=임형묵&test=abc">3. 서버호출하면서 서버에 데이터 전송하기(a태그)</a></h3>
+	<form action="/sendData2" method="get">
+		<fieldset>
+			<legend>로그인</legend>
+			<div>
+				<label for="id">아이디</label>
+				<input type="text" name="memberId" id="id">
+			</div>
+			<div>
+				<label for="pw">비밀번호</label>
+				<input type="password" name="memberPw" id="pw">
+			</div>
+			<div>
+				<input type="submit" value="로그인">
+			</div>
+		</fieldset>
+	</form>
+	<form action="/sendData3" method="get">
+		<fieldset>
+			<legend>데이터전송</legend>
+			<input type="text" name="data1"><br>
+			<input type="text" name="text"><br>
+			<input type="text" name="abc"><br>
+			<input type="submit" value="전송">
+		</fieldset>
+	</form>
+	
+	<form action="/sendData4" method="get">
+		<fieldset>
+			<legend>데이터 전송 테스트</legend>
+				문자열 전송 : <input type="text" name="str"><br>
+				숫자 전송 : <input type="text" name="num"><br>
+				성별 : 
+					<input type="radio" name="gender" value="남" id="m">
+					<label for="m">남자</label>
+					<input type="radio" name="gender" value="여" id="f">
+					<label for="f">여자</label>
+					<br>
+				취미 : 
+					<input type="checkbox" name="hobby" value="독서" id="book">
+					<label for="book">책읽기</label>
+					<input type="checkbox" name="hobby" value="잠" id="sleep">
+					<label for="sleep">잠자기</label>
+					<input type="checkbox" name="hobby" value="게임" id="game">
+					<label for="game">게임</label>
+					<br>
+				연령대 : 
+				<select name="age">
+					<option value="10">10대</option>
+					<option value="20">20대</option>
+					<option value="30">30대</option>
+					<option value="40">40대</option>					
+				</select>
+				<br>
+				하고싶은 말 : 
+				<textarea name="comment"></textarea>
+				<br>
+				히든 데이터 : <input type="hidden" name="hiddenData" value="숨겨진값"><br>
+				readonly : <input type="text" name="input1" value="읽기전용데이터" readonly><br>
+				disabled : <input type="text" name="input2" value="비활성화데이터" disabled><br>
+				div : <div name="div" value="div데이터">div데이터</div>
+				<input type="submit" value="서버로 전송">
+		</fieldset>
+	</form>
+	
+	<form action="/sendData5">
+	 <fieldset>
+	 <legend>더하기</legend>
+	 <input type="text" name="num1">+<input type="text" name="num2">
+	 <button id="plus" >더하기</button>
+	 </fieldset>
+	</form>
+	
+	<form action="/sendData6">
+		<fieldset>
+		<legend>더하기</legend>
+			<input type="text" name="num1">
+			<select name="str">
+				<option value="+">+</option>
+				<option value="-">-</option>
+				<option value="*">*</option>
+				<option value="/">/</option>
+			</select>
+				<input type="text" name="num1">		
+				<button id="plus">더하기</button>		
+		</fieldset>
+	</form>
+</body>
+</html>

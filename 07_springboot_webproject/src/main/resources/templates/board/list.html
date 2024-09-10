@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>자유게시판</title>
+<style>
+	.board-list-wrap{
+		width: 1200px;
+		margin: 0 auto;
+	}
+	.board-list-wrap>div:nth-child(3){
+		height:500px;	
+	}
+	
+	#pageNavi{
+		margin-top: 30px;
+	}
+	
+	.list-header{
+		padding : 10px 0px;
+		overflow: hidden;
+	}
+	
+	#write-btn{
+		display : inlien-block;
+	}
+	
+	#searchFrm{
+		display : flex;
+		float : right;
+	}
+	#searchFrm .select{
+		width:90px;
+	}
+	
+	
+	
+</style>
+</head>
+<body>
+	<th:block th:include="common/header"></th:block>
+		<main class="content">
+			<section class="section board-list-wrap">
+				<div class="page-title">자유게시판..</div>
+				<div class="list-header">
+					<a th:if="${session.member != null && session.member.memberLevel == 1}" class="btn-point" id="write-btn" href="/board/writeFrm">글쓰기</a>
+					
+					<form action ="/board/search" method="get" id="searchFrm">
+						<div class="input-item">
+							<div class="select">
+								<select name="type">
+									<option value="title">제목</option>
+									<option value="writer">작성자</option>
+								</select>
+							</div>
+							<input type="text" name="keyword">
+							<button type="submit" class="btn-primary">조회</button>
+						</div>
+					</form>
+				
+				
+				
+				</div>
+				<div>
+					<table class="tbl tbl-hover">
+						<tr>
+							<th style="width:10%;">글번호</th>
+							<th style="width:45%;">제목</th>
+							<th style="width:15%;">작성자</th>
+							<th style="width:20%;">작성일</th>
+							<th style="width:10%;">조회수</th>
+						</tr>
+						<tr th:each="board : ${list}">
+							<td th:text="${board.boardNo}"></td>
+							<td class="left"><a th:href="@{/board/view(boardNo=${board.boardNo})}" th:text="${board.boardTitle}"></a></td>
+							<td th:text="${board.boardWriter}"></td>
+							<td th:text="${board.regDate}"></td>
+							<td th:text="${board.readCount}"></td>
+						</tr>
+					</table>
+				</div>
+				<!-- 
+					th:text로 문자열을 넣으면 태그로 동작하지 않고 문자열로 표현
+					문자열을 태그로 인식시키려면 th:utext를 사용
+				 -->
+				<div id="pageNavi" th:utext="${pageNavi}"></div>
+		 	</section>
+		 </main>
+	<th:block th:include="common/footer"></th:block>
+</body>
+</html>
